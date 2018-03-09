@@ -2,14 +2,14 @@ USE [AdventureWorks2014]
 GO
 
 -- scalar function
---ALTER FUNCTION test ()
---RETURNS INT
---AS
---BEGIN
---	RETURN 42;
---END
+CREATE FUNCTION test ()
+RETURNS INT
+AS
+BEGIN
+	RETURN 42;
+END
 
---SELECT dbo.test()
+SELECT dbo.test()
 
 CREATE FUNCTION Sales.uf_MostRecentCustomerOrderDate(@CustomerID INT)
 	RETURNS DATETIME
@@ -47,7 +47,7 @@ FROM Sales.uf_CustomerOrderDates(11000)
 -- multi statement table valued function
 -- returns a table, but can use complex logic
 
-ALTER FUNCTION Sales.uf_CustomerOrderDetails(@ContactsWithOrders bit)
+CREATE FUNCTION Sales.uf_CustomerOrderDetails(@ContactsWithOrders bit)
 	RETURNS @ContactOrderDetails TABLE (ContactID int)
 AS
 BEGIN
@@ -57,8 +57,8 @@ BEGIN
 		SELECT CustomerID
 		FROM Sales.Customer c
 		WHERE EXISTS (SELECT * 
-						FROM Sales.SalesOrderHeader soh
-						WHERE soh.CustomerId = c.CustomerId);
+				FROM Sales.SalesOrderHeader soh
+				WHERE soh.CustomerId = c.CustomerId);
 	END
 	ELSE
 	BEGIN
@@ -66,8 +66,8 @@ BEGIN
 		SELECT CustomerID
 		FROM Sales.Customer c
 		WHERE NOT EXISTS (SELECT *
-							FROM Sales.SalesOrderHeader soh
-							WHERE soh.CustomerID = c.CustomerID);
+				FROM Sales.SalesOrderHeader soh
+				WHERE soh.CustomerID = c.CustomerID);
 	END
 	RETURN;
 END;
